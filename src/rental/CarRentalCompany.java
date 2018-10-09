@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CarRentalCompany {
+public class CarRentalCompany implements ICarRentalCompany {
 
 	private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
 	
@@ -153,10 +153,15 @@ public class CarRentalCompany {
 		Car car = availableCars.get((int)(Math.random()*availableCars.size()));
 		
 		Reservation res = new Reservation(quote, car.getId());
+		reservations.add(res);
 		car.addReservation(res);
+		
 		return res;
 	}
-
+	private List<Reservation> reservations;
+	public List<Reservation> getReservations(){
+		return this.reservations;
+	}
 	public void cancelReservation(Reservation res) {
 		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[]{name, res.toString()});
 		getCar(res.getCarId()).removeReservation(res);

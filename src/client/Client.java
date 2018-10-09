@@ -1,23 +1,43 @@
 package client;
-
+import java.text.SimpleDateFormat;  
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import rental.CarType;
+import rental.ICarRentalCompany;
 import rental.Quote;
 import rental.Reservation;
+import rental.ReservationConstraints;
 
 public class Client extends AbstractTestBooking {
+	private ICarRentalCompany crc;
 	
 	/********
 	 * MAIN *
 	 ********/
 	
 	public static void main(String[] args) throws Exception {
+		System.setSecurityManager(null);
+		Registry registry = LocateRegistry.getRegistry("localhost", 1099);
 		
 		String carRentalCompanyName = "Hertz";
 		
-		// An example reservation scenario on car rental company 'Hertz' would be...
 		Client client = new Client("simpleTrips", carRentalCompanyName);
+		
+		client.crc =(ICarRentalCompany) registry.lookup(carRentalCompanyName);
+		String sDate1= args[2];  
+	    Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(sDate1); 
+	    String sDate2= args[3];  
+	    Date date2=new SimpleDateFormat("dd/MM/yyyy").parse(sDate2); 
+	    Set<CarType> cars = client.crc.getAvailableCarTypes(date1 , date2);
+
+	
+		// An example reservation scenario on car rental company 'Hertz' would be...
+		
 		client.run();
 	}
 	
@@ -44,8 +64,10 @@ public class Client extends AbstractTestBooking {
 	 */
 	@Override
 	protected void checkForAvailableCarTypes(Date start, Date end) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO");
+		Set<CarType> cars = this.crc.getAvailableCarTypes(start, end);
+		for (CarType s : cars) {
+		    System.out.println(s);
+		}
 	}
 
 	/**
@@ -69,8 +91,9 @@ public class Client extends AbstractTestBooking {
 	@Override
 	protected Quote createQuote(String clientName, Date start, Date end,
 			String carType, String region) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO");
+		ReservationConstraints constraints = new ReservationConstraints(start,end,carType,region);
+		Quote quote = crc.createQuote(constraints, clientName);
+		return quote;
 	}
 
 	/**
@@ -85,8 +108,10 @@ public class Client extends AbstractTestBooking {
 	 */
 	@Override
 	protected Reservation confirmQuote(Quote quote) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO");
+		Reservation res = crc.confirmQuote(quote);
+		return res;
+		
+		
 	}
 	
 	/**
@@ -101,8 +126,12 @@ public class Client extends AbstractTestBooking {
 	 */
 	@Override
 	protected List<Reservation> getReservationsByRenter(String clientName) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO");
+		List<Reservation> res = new ArrayList<>();
+		for (Reservation r : crc.getReservations() ) {
+			if (r.getCarRenter()== clientName) {
+				res.add(r);}
+			}
+		return res;
 	}
 
 	/**
