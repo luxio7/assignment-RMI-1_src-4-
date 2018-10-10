@@ -1,5 +1,4 @@
-package client;
-import java.text.SimpleDateFormat;  
+package client; 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
@@ -28,6 +27,7 @@ public class Client extends AbstractTestBooking {
 		
 		Client client = new Client("simpleTrips", carRentalCompanyName);
 		
+		client.crc = (ICarRentalCompany) registry.lookup("rentalserver");
 
 	
 		// An example reservation scenario on car rental company 'Hertz' would be...
@@ -138,6 +138,7 @@ public class Client extends AbstractTestBooking {
 	 */
 	@Override
 	protected int getNumberOfReservationsForCarType(String carType) throws Exception {
+		System.out.println(crc.getReservationsByType(carType));
 		return crc.getReservationsByType(carType);
 	}
 }

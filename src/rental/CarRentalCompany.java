@@ -156,13 +156,18 @@ public class CarRentalCompany implements ICarRentalCompany {
 		car.addReservation(res);
 		
 		reservations.add(res);
-		int amount = reservationsByType.get(quote.getCarType());
-		reservationsByType.put(quote.getCarType(),amount+1);
 		
+		Integer amount = reservationsByType.get(quote.getCarType());
+		if (amount == null){
+			reservationsByType.put(quote.getCarType(),1);
+		} else {
+			reservationsByType.put(quote.getCarType(),amount + 1);
+		};
 		
 		return res;
 	}
-	private Map<String,Integer> reservationsByType = new HashMap();
+	private Map<String,Integer> reservationsByType = new HashMap<String, Integer>();
+	
 	public Integer getReservationsByType(String CarType){
 		return this.reservationsByType.get(CarType);
 	}
