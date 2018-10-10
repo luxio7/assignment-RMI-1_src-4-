@@ -28,12 +28,6 @@ public class Client extends AbstractTestBooking {
 		
 		Client client = new Client("simpleTrips", carRentalCompanyName);
 		
-		client.crc =(ICarRentalCompany) registry.lookup(carRentalCompanyName);
-		String sDate1= args[2];  
-	    Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(sDate1); 
-	    String sDate2= args[3];  
-	    Date date2=new SimpleDateFormat("dd/MM/yyyy").parse(sDate2); 
-	    Set<CarType> cars = client.crc.getAvailableCarTypes(date1 , date2);
 
 	
 		// An example reservation scenario on car rental company 'Hertz' would be...
@@ -47,8 +41,6 @@ public class Client extends AbstractTestBooking {
 	
 	public Client(String scriptFile, String carRentalCompanyName) {
 		super(scriptFile);
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO");
 	}
 	
 	/**
