@@ -11,8 +11,10 @@ import rental.ICarRentalCompany;
 import rental.Quote;
 import rental.Reservation;
 import rental.ReservationConstraints;
+import session.ManagerSession;
+import session.ReservationSession;
 
-public class Client extends AbstractTestBooking {
+public class Client extends AbstractTestBooking<ReservationSession, ManagerSession> {
 	private ICarRentalCompany crc;
 	
 	/********
@@ -140,5 +142,17 @@ public class Client extends AbstractTestBooking {
 	protected int getNumberOfReservationsForCarType(String carType) throws Exception {
 		System.out.println(crc.getReservationsByType(carType));
 		return crc.getReservationsByType(carType);
+	}
+
+	@Override
+	protected ReservationSession getNewReservationSession(String name) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected ManagerSession getNewManagerSession(String name) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
