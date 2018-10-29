@@ -8,13 +8,21 @@ import rental.ICarRentalCompany;
 
 public class NamingService implements INamingService{
 	
-	Map<String, ICarRentalCompany> registeredCRC = new HashMap();
+	static Map<String, CarRentalCompany> registeredCRC = new HashMap();
 	
-	public void register(String name, ICarRentalCompany crc){
+	public void register(String name, CarRentalCompany crc){
 		registeredCRC.put(name, crc);
 	}
 	
 	public void unregister(String name){
 		registeredCRC.remove(name);
 	}
+	public Map<String, CarRentalCompany> getRentals(){
+		return registeredCRC;
+	}
+	public CarRentalCompany getRental(String CrcName){
+		return registeredCRC.get(CrcName);
+	}
+
+
 }
