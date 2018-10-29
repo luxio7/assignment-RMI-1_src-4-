@@ -16,16 +16,16 @@ import rental.Reservation;
 public class ManagerSession extends AbstractSession implements IManagerSession{
 	
 	
-	public ManagerSession(INamingService namingservice) {
-		super(namingservice);
+	public ManagerSession(INamingService namingservice, String id) {
+		super(namingservice, id);
 	}
 	
 	public void addCarRentalCompany(String name, CarRentalCompany crc){
-		this.namingservice.register(name, crc);
+		this.namingService.register(name, crc);
 	}
 	
 	public void UnRegisterCarRentalCompany(String name){
-		this.namingservice.unregister(name);
+		this.namingService.unregister(name);
 	}
 	
 	public Integer numberOfReservationsByCarType(String cartype, CarRentalCompany crc){
@@ -33,7 +33,7 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
 	}
 	
 	public String getBestCustomer(String crc1){
-        CarRentalCompany crc = namingservice.getRental(crc1);
+        CarRentalCompany crc = namingService.getRental(crc1);
         Collection<Car> cars = crc.getCars();
         Map<String,Integer> map = new HashMap();
         for(Car c : cars){
