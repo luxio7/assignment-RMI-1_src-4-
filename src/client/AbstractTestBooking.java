@@ -33,10 +33,12 @@ import rental.Reservation;
  * c 
  * Modifier to indicate that the according command will fail
  */
-public abstract class AbstractTestBooking extends AbstractTesting {
+public abstract class AbstractTestBooking<ReservationSession, ManagerSession> extends AbstractTesting {
 	//open sessions
+	
 	private Map<String, Quote> singleQuoteSessions = new HashMap<String, Quote>();
-
+	protected abstract ReservationSession getNewReservationSession(String name) throws Exception;
+	protected abstract ManagerSession getNewManagerSession(String name) throws Exception;
 	
 	/**
 	 * Print available car types for a given period.
