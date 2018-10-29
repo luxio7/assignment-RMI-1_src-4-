@@ -67,7 +67,7 @@ public class ReservationSession implements IReservationSession{
     }
     
     
-    public List<CarType> getAvailableCarTypes(Date start, Date end, ){
+    public List<CarType> getAvailableCarTypes(Date start, Date end){
         List<CarType> cartype = new ArrayList();      
         for(String crc : getAllRentalCompanies()){
             CarRentalCompany crc1 = INamingService.getRental(crc);
@@ -105,7 +105,7 @@ public class ReservationSession implements IReservationSession{
             		minimumPrice = ct.getRentalPricePerDay();
             	}
             }
-            
+        }
         return cheapestCarType;
     }
     
