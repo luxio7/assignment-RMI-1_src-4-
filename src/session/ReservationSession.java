@@ -1,23 +1,45 @@
 package session;
 
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import client.Client;
 import namingservice.INamingService;
+import namingservice.NamingServer;
+import namingservice.NamingService;
 import rental.CarRentalCompany;
 import rental.CarType;
+import rental.ICarRentalCompany;
 import rental.Quote;
 import rental.Reservation;
 import rental.ReservationConstraints;
 import rental.ReservationException;
 
 public class ReservationSession implements IReservationSession{
+	NamingService nameService;
+	
+	public static void main(String[] args) throws Exception {
+		System.setSecurityManager(null);
+		Registry registry = LocateRegistry.getRegistry("namingserver", 1099);
+		
+		ReservationSession reservationsession = new ReservationSession();
+		
+		reservationsession.nameService = (NamingService) registry.lookup("namingserver");
+		
+		//run()?
+	}
+	
+	public ReservationSession(){
+	}
+	
 
     public Set<String> getAllRentalCompanies() {
-        return new HashSet<String>(INamingService.getRentals().keySet());
+        return new HashSet<String>(nameService.getRentals().keySet());
     }
 	
     private List<Quote> quotes = new ArrayList();
@@ -26,7 +48,7 @@ public class ReservationSession implements IReservationSession{
         boolean go = true;
         for (String s: getAllRentalCompanies()){
               try{
-                  CarRentalCompany crc = INamingService.getRental(s);
+                  CarRentalCompany crc = nameService.getRental(s);
                   Quote quote = crc.createQuote(constraint, client);
                   quotes.add(quote);
                   go = false;
@@ -50,13 +72,13 @@ public class ReservationSession implements IReservationSession{
         List<Reservation> res = new ArrayList<Reservation>();
         for (Quote q: quotes){
             try{
-                CarRentalCompany crc = INamingService.getRental(q.getRentalCompany());
+                CarRentalCompany crc = nameService.getRental(q.getRentalCompany());
                 Reservation reservation = crc.confirmQuote(q);
                 res.add(reservation);
             }
             catch(ReservationException e){
                 for(Reservation r : res ){
-                    CarRentalCompany crc = INamingService.getRental(r.getRentalCompany());
+                    CarRentalCompany crc = nameService.getRental(r.getRentalCompany());
                     crc.cancelReservation(r);
                 }
                 
@@ -70,7 +92,7 @@ public class ReservationSession implements IReservationSession{
     public List<CarType> getAvailableCarTypes(Date start, Date end){
         List<CarType> cartype = new ArrayList();      
         for(String crc : getAllRentalCompanies()){
-            CarRentalCompany crc1 = INamingService.getRental(crc);
+            CarRentalCompany crc1 = nameService.getRental(crc);
             for(CarType ct : crc1.getAvailableCarTypes(start, end)){
                 cartype.add(ct);
             }
@@ -86,7 +108,7 @@ public class ReservationSession implements IReservationSession{
         
         //de juiste rentalcompanie krijgen
         for(String crc : getAllRentalCompanies()){
-            CarRentalCompany crc1 = INamingService.getRental(crc);
+            CarRentalCompany crc1 = nameService.getRental(crc);
             for (String regionToCheck : crc1.getRegions()){
             	if (regionToCheck == region) {
             		goodCarRentalCompany.add(crc1);
