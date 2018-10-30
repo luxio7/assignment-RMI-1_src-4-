@@ -46,7 +46,7 @@ public class CarRentalAgency implements ICarRentalAgency{
 		if (session != null) {
 			return session;
 		} else {
-			ReservationSession newSession = new ReservationSession(this.namingService, sessionId, clientName);
+			ReservationSession newSession = new ReservationSession(this.namingService, sessionId);
 			this.activeReservationSessions.put(sessionId, newSession);
 			return (IReservationSession) UnicastRemoteObject.exportObject(newSession, 0);
 		}

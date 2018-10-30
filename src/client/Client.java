@@ -33,7 +33,6 @@ public class Client extends AbstractTestAgency<ReservationSession, ManagerSessio
 		
 		Client client = new Client("simpleTrips", carRentalCompanyName);
 		
-		client.crc = (ICarRentalCompany) registry.lookup("rentalserver");
 		NamingServer.main(args);
 		CarRentalAgencyServer.main(args);
 		INamingService namingservice1 = (INamingService) registry.lookup("namingserver");
@@ -53,81 +52,21 @@ public class Client extends AbstractTestAgency<ReservationSession, ManagerSessio
 		super(scriptFile);
 	}
 	
-	/**
-	 * Retrieve a quote for a given car type (tentative reservation).
-	 * 
-	 * @param	clientName 
-	 * 			name of the client 
-	 * @param 	start 
-	 * 			start time for the quote
-	 * @param 	end 
-	 * 			end time for the quote
-	 * @param 	carType 
-	 * 			type of car to be reserved
-	 * @param 	region
-	 * 			region in which car must be available
-	 * @return	the newly created quote
-	 *  
-	 * @throws 	Exception
-	 * 			if things go wrong, throw exception
-	 */
 
-	protected Quote createQuote(String clientName, Date start, Date end,
-			String carType, String region) throws Exception {
-		ReservationConstraints constraints = new ReservationConstraints(start,end,carType,region);
-		Quote quote = crc.createQuote(constraints, clientName);
-		return quote;
-	}
-
-	/**
-	 * Confirm the given quote to receive a final reservation of a car.
-	 * 
-	 * @param 	quote 
-	 * 			the quote to be confirmed
-	 * @return	the final reservation of a car
-	 * 
-	 * @throws 	Exception
-	 * 			if things go wrong, throw exception
-	 */
-
-	protected Reservation confirmQuote(Quote quote) throws Exception {
-		Reservation res = crc.confirmQuote(quote);
-		return res;
-		
-		
-	}
-	
-
-
-	/**
-	 * Get the number of reservations for a particular car type.
-	 * 
-	 * @param 	carType 
-	 * 			name of the car type
-	 * @return 	number of reservations for the given car type
-	 * 
-	 * @throws 	Exception
-	 * 			if things go wrong, throw exception
-	 */
-//	@Override
-//	protected int getNumberOfReservationsForCarType(String carType) throws Exception {
-//		System.out.println(crc.getReservationsByType(carType));
-//		return crc.getReservationsByType(carType);
-//	}
 
 	@Override
 	protected ReservationSession getNewReservationSession(String name) throws Exception {
-		ReservationSession resSes = new ReservationSession(this.namingservice);
+		ReservationSession resSes = new ReservationSession(this.namingservice, "reservation_"+name);
 		return resSes;
 	}
 
 
 	@Override
 	protected ManagerSession getNewManagerSession(String name, String carRentalName) throws Exception {
-		ManagerSession manSes = new ManagerSession(this.namingservice);
+		ManagerSession manSes = new ManagerSession(this.namingservice,"reservation_"+name);
 		return manSes;
 	}
-
+	
 	@Override
 	protected void checkForAvailableCarTypes(ReservationSession session, Date start, Date end) throws Exception {
 		List<CarType> cars = session.getAvailableCarTypes(start, end);

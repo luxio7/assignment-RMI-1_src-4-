@@ -1,10 +1,8 @@
 package session;
 
-<<<<<<< HEAD
+
 import java.rmi.RemoteException;
-=======
-import java.text.SimpleDateFormat;
->>>>>>> d6c78073120c7ee310f5bcbb168bd78a78d0a04f
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
