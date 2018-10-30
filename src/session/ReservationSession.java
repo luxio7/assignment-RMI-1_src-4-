@@ -39,23 +39,34 @@ public class ReservationSession extends AbstractSession implements IReservationS
 	
     private List<Quote> quotes = new ArrayList();
     
-    public void createQuote(ReservationConstraints constraint, String client) throws ReservationException, RemoteException{
-        boolean go = true;
+    public void createQuote(ReservationConstraints constraint, String client) throws Exception{
+        boolean go = false;
+        Exception reservationexception = null;
+        
+        if (getAllRentalCompanies().size()!=0){
+        	go = true;
+        }
+        
+        System.out.println("dit zijn alle gevonden crc's");
+        Set<String> t = getAllRentalCompanies();
+        System.out.println(t);
+        
+        //hij vindt geen rental companies bij de eerste voorbeelden
         
         for (String s: getAllRentalCompanies()){
               try{
-                  CarRentalCompany crc = namingService.getRental(s);
+                  ICarRentalCompany crc = namingService.getRental(s);
                   Quote quote = crc.createQuote(constraint, client);
                   quotes.add(quote);
                   go = false;
               }
               catch (Exception ex){
-            	  
+            	  reservationexception = ex;
               }
         
         }
         if (go){
-            throw new ReservationException("error in create Quote");
+            throw reservationexception;
         }
       }
     
@@ -68,13 +79,13 @@ public class ReservationSession extends AbstractSession implements IReservationS
         List<Reservation> res = new ArrayList<Reservation>();
         for (Quote q: quotes){
             try{
-                CarRentalCompany crc = namingService.getRental(q.getRentalCompany());
+                ICarRentalCompany crc = namingService.getRental(q.getRentalCompany());
                 Reservation reservation = crc.confirmQuote(q);
                 res.add(reservation);
             }
             catch(ReservationException e){
                 for(Reservation r : res ){
-                    CarRentalCompany crc = namingService.getRental(r.getRentalCompany());
+                    ICarRentalCompany crc = namingService.getRental(r.getRentalCompany());
                     crc.cancelReservation(r);
                 }
                 
@@ -88,7 +99,7 @@ public class ReservationSession extends AbstractSession implements IReservationS
     public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException{
         List<CarType> cartype = new ArrayList();      
         for(String crc : getAllRentalCompanies()){
-            CarRentalCompany crc1 = namingService.getRental(crc);
+            ICarRentalCompany crc1 = namingService.getRental(crc);
             for(CarType ct : crc1.getAvailableCarTypes(start, end)){
                 cartype.add(ct);
             }
@@ -99,12 +110,12 @@ public class ReservationSession extends AbstractSession implements IReservationS
     public CarType getCheapestCarType(Date start, Date end, String region) throws RemoteException{
     	
         List<CarType> availableCartypes = new ArrayList();
-        List<CarRentalCompany> goodCarRentalCompany = new ArrayList();
+        List<ICarRentalCompany> goodCarRentalCompany = new ArrayList();
         CarType cheapestCarType = null;
         
         //de juiste rentalcompanie krijgen
         for(String crc : getAllRentalCompanies()){
-            CarRentalCompany crc1 = namingService.getRental(crc);
+            ICarRentalCompany crc1 = namingService.getRental(crc);
             for (String regionToCheck : crc1.getRegions()){
             	if (regionToCheck == region) {
             		goodCarRentalCompany.add(crc1);
@@ -115,7 +126,7 @@ public class ReservationSession extends AbstractSession implements IReservationS
         //de juiste cartypes krijgen van de car rental companies en de goedkoopste opslaan
         double minimumPrice = Double.POSITIVE_INFINITY;
         
-        for(CarRentalCompany crc : goodCarRentalCompany){
+        for(ICarRentalCompany crc : goodCarRentalCompany){
         	
             for(CarType ct : crc.getAvailableCarTypes(start, end)){
             	if (ct.getRentalPricePerDay() < minimumPrice){

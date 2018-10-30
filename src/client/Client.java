@@ -9,6 +9,7 @@ import java.util.Set;
 import carrentalagency.CarRentalAgencyServer;
 import namingservice.INamingService;
 import namingservice.NamingServer;
+import rental.CarRentalCompany;
 import rental.CarType;
 import rental.ICarRentalCompany;
 import rental.Quote;
@@ -35,6 +36,11 @@ public class Client extends AbstractTestAgency<ReservationSession, ManagerSessio
 		CarRentalAgencyServer.main(args);
 		INamingService namingservice1 = (INamingService) registry.lookup("namingserver");
 		client.namingservice = namingservice1;
+		ICarRentalCompany crc1 = (ICarRentalCompany) registry.lookup("Hertz");
+		ICarRentalCompany crc2 = (ICarRentalCompany) registry.lookup("Dockx");
+		namingservice1.register("Hertz", crc1);
+		namingservice1.register("Dockx", crc2);
+		
 		
 	
 		// An example reservation scenario on car rental company 'Hertz' would be...

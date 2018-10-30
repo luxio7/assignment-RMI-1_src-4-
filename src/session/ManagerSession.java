@@ -26,6 +26,7 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
 	
 	public void addCarRentalCompany(String name, CarRentalCompany crc) throws RemoteException{
 		try{
+			System.out.println("hij gaat een crc proberen toe te voegen in managersession -> add car rental company");
 			this.namingService.register(name, crc);
 		} catch (RemoteException e){
 			throw new RemoteException();
@@ -42,7 +43,7 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
 	}
 	
 	public Integer numberOfReservationsByCarType(String cartype, String crc) throws RemoteException{
-		CarRentalCompany crc1 = this.getNamingService().getRental(crc);
+		ICarRentalCompany crc1 = this.getNamingService().getRental(crc);
 		return crc1.getReservationsByType(cartype);
 	}
 	
@@ -55,7 +56,7 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
         return counter;
     }
 	public String getBestCustomer(String crc1) throws RemoteException{
-        CarRentalCompany crc = namingService.getRental(crc1);
+        ICarRentalCompany crc = namingService.getRental(crc1);
         Collection<Car> cars = crc.getCars();
         Map<String,Integer> map = new HashMap<String, Integer>();
         for(Car c : cars){

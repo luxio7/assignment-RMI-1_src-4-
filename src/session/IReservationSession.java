@@ -16,7 +16,7 @@ import rental.ReservationException;
 public interface IReservationSession extends Remote {
 	
 	public Set<String> getAllRentalCompanies() throws RemoteException;
-	public void createQuote(ReservationConstraints constraint, String client) throws ReservationException, RemoteException;
+	public void createQuote(ReservationConstraints constraint, String client) throws Exception;
 	public List<Quote> getCurrentQuotes();
 	public List<Reservation> confirmQuotes(List<Quote> quotes) throws ReservationException, RemoteException;
 	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException;
