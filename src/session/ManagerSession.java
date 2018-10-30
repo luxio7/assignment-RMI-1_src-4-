@@ -1,5 +1,6 @@
 package session;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -35,7 +36,7 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
 	public String getBestCustomer(String crc1){
         CarRentalCompany crc = namingService.getRental(crc1);
         Collection<Car> cars = crc.getCars();
-        Map<String,Integer> map = new HashMap();
+        Map<String,Integer> map = new HashMap<String, Integer>();
         for(Car c : cars){
             for(Reservation r : c.getAllReservations()){
                 if(map.containsKey(r.getCarRenter())){
@@ -58,6 +59,7 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
         }
         return clien;
     }
+	
 	
 	public CarType getMostPopularCarType(Integer year, CarRentalCompany crc){
 		Map<CarType, Integer> reservations = new HashMap<CarType, Integer>();
