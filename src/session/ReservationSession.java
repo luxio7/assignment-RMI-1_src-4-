@@ -47,7 +47,7 @@ public class ReservationSession extends AbstractSession implements IReservationS
         	go = true;
         }
         
-        System.out.println("dit zijn alle gevonden crc's");
+        System.out.println("dit zijn alle gevonden crc's voor: " + client);
         Set<String> t = getAllRentalCompanies();
         System.out.println(t);
         
@@ -58,6 +58,7 @@ public class ReservationSession extends AbstractSession implements IReservationS
                   ICarRentalCompany crc = namingService.getRental(s);
                   Quote quote = crc.createQuote(constraint, client);
                   quotes.add(quote);
+                  System.out.println("er is een quote geadd voor " + client);
                   go = false;
               }
               catch (Exception ex){
@@ -66,6 +67,7 @@ public class ReservationSession extends AbstractSession implements IReservationS
         
         }
         if (go){
+        	System.out.println("reservaties geannuleerd voor " + client);
             throw reservationexception;
         }
       }
@@ -80,16 +82,23 @@ public class ReservationSession extends AbstractSession implements IReservationS
         for (Quote q: quotes){
             try{
                 ICarRentalCompany crc = namingService.getRental(q.getRentalCompany());
+                System.out.println("de crc die misschien ne nullpointer geeft");
+                System.out.println(crc);
+                System.out.println("confirming quote in reservation session -> confrim quotes..");
+                System.out.println(q);
                 Reservation reservation = crc.confirmQuote(q);
+                System.out.println("hij geraakt na confirmQuote");
                 res.add(reservation);
+                System.out.println("..quote is geconfirmed");
             }
             catch(ReservationException e){
+            	System.out.println("..quote is NIET geconfirmed");
                 for(Reservation r : res ){
                     ICarRentalCompany crc = namingService.getRental(r.getRentalCompany());
                     crc.cancelReservation(r);
                 }
                 
-                //throw new ReservationException("All reservations cancelled");
+                throw new ReservationException("All reservations cancelled");
             }
         }
         return res;

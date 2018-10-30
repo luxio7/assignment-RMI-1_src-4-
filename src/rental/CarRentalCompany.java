@@ -1,5 +1,6 @@
 package rental;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -124,6 +125,17 @@ public class CarRentalCompany implements ICarRentalCompany {
 	/****************
 	 * RESERVATIONS *
 	 ****************/
+	
+
+	private List<Reservation> reservations = new ArrayList<Reservation>();
+	
+	public List<Reservation> getReservations(){
+		return this.reservations;
+	}
+	public void cancelReservation(Reservation res) {
+		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[]{name, res.toString()});
+		getCar(res.getCarId()).removeReservation(res);
+	}
 
 	public Quote createQuote(ReservationConstraints constraints, String client)
 			throws ReservationException {
@@ -150,19 +162,28 @@ public class CarRentalCompany implements ICarRentalCompany {
 	}
 
 	public Reservation confirmQuote(Quote quote) throws ReservationException {
+		System.out.println("hij geraakt in car rental company -> confirm quote");
 		logger.log(Level.INFO, "<{0}> Reservation of {1}", new Object[]{name, quote.toString()});
 		List<Car> availableCars = getAvailableCars(quote.getCarType(), quote.getStartDate(), quote.getEndDate());
 		if(availableCars.isEmpty())
 			throw new ReservationException("Reservation failed, all cars of type " + quote.getCarType()
 	                + " are unavailable from " + quote.getStartDate() + " to " + quote.getEndDate());
+		System.out.println("hij gaat nu een nieuwe car maken");
 		Car car = availableCars.get((int)(Math.random()*availableCars.size()));
-		
+		System.out.println(car);
+		System.out.println("nu een nieuwe reservation");
 		Reservation res = new Reservation(quote, car.getId());
-		car.addReservation(res);
+		System.out.println(res);
 		
+		car.addReservation(res);
+		System.out.println("HIER KOMT HIJ");
+		System.out.println(res);
+		System.out.println(reservations);
 		reservations.add(res);
 		
+		System.out.println("het amount is:");
 		Integer amount = reservationsByType.get(quote.getCarType());
+		System.out.println(amount);
 		if (amount == null){
 			reservationsByType.put(quote.getCarType(),1);
 		} else {
@@ -175,16 +196,6 @@ public class CarRentalCompany implements ICarRentalCompany {
 	
 	public Integer getReservationsByType(String CarType){
 		return this.reservationsByType.get(CarType);
-	}
-	
-
-	private List<Reservation> reservations;
-	public List<Reservation> getReservations(){
-		return this.reservations;
-	}
-	public void cancelReservation(Reservation res) {
-		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[]{name, res.toString()});
-		getCar(res.getCarId()).removeReservation(res);
 	}
 	
 	@Override
