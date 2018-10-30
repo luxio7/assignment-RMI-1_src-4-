@@ -1,6 +1,8 @@
 package session;
 
-import java.text.SimpleDateFormat;
+
+import java.rmi.RemoteException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -12,6 +14,7 @@ import namingservice.INamingService;
 import rental.Car;
 import rental.CarRentalCompany;
 import rental.CarType;
+import rental.ICarRentalCompany;
 import rental.Reservation;
 
 public class ManagerSession extends AbstractSession implements IManagerSession{
@@ -21,19 +24,37 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
 		super(namingservice, id);
 	}
 	
-	public void addCarRentalCompany(String name, CarRentalCompany crc){
-		this.namingService.register(name, crc);
+	public void addCarRentalCompany(String name, CarRentalCompany crc) throws RemoteException{
+		try{
+			this.namingService.register(name, crc);
+		} catch (RemoteException e){
+			throw new RemoteException();
+		}
+		
+	}
+
+	public void UnRegisterCarRentalCompany(String name) throws RemoteException{
+		try{
+			this.namingService.unregister(name);
+		} catch (RemoteException e){
+			throw new RemoteException();
+		}
 	}
 	
-	public void UnRegisterCarRentalCompany(String name){
-		this.namingService.unregister(name);
+	public Integer numberOfReservationsByCarType(String cartype, String crc) throws RemoteException{
+		CarRentalCompany crc1 = this.getNamingService().getRental(crc);
+		return crc1.getReservationsByType(cartype);
 	}
 	
-	public Integer numberOfReservationsByCarType(String cartype, CarRentalCompany crc){
-		return crc.getReservationsByType(cartype);
-	}
-	
-	public String getBestCustomer(String crc1){
+    public int getNumberReservationsBy(String clientName) throws RemoteException {
+        int counter = 0;
+        Map<String, ICarRentalCompany> rentals = this.getNamingService().registeredCRC;
+        for (ICarRentalCompany crc: rentals.values()) {
+            counter += crc.getReservationsBy(clientName).size();
+        }
+        return counter;
+    }
+	public String getBestCustomer(String crc1) throws RemoteException{
         CarRentalCompany crc = namingService.getRental(crc1);
         Collection<Car> cars = crc.getCars();
         Map<String,Integer> map = new HashMap<String, Integer>();

@@ -1,6 +1,8 @@
 package session;
 
+import java.io.IOException;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -13,11 +15,11 @@ import rental.ReservationException;
 
 public interface IReservationSession extends Remote {
 	
-	public Set<String> getAllRentalCompanies();
-	public void createQuote(ReservationConstraints constraint, String client) throws ReservationException;
+	public Set<String> getAllRentalCompanies() throws RemoteException;
+	public void createQuote(ReservationConstraints constraint, String client) throws ReservationException, RemoteException;
 	public List<Quote> getCurrentQuotes();
-	public List<Reservation> confirmQuotes(List<Quote> quotes) throws ReservationException;
-	public List<CarType> getAvailableCarTypes(Date start, Date end);
-	public CarType getCheapestCarType(Date start, Date end, String region);
+	public List<Reservation> confirmQuotes(List<Quote> quotes) throws ReservationException, RemoteException;
+	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException;
+	public CarType getCheapestCarType(Date start, Date end, String region) throws RemoteException;
 	
 }

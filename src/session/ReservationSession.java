@@ -1,11 +1,14 @@
 package session;
 
+import java.io.IOException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -30,14 +33,15 @@ public class ReservationSession extends AbstractSession implements IReservationS
 	}
 	
 
-    public Set<String> getAllRentalCompanies() {
-        return new HashSet<String>(namingService.getRentals().keySet());
+    public Set<String> getAllRentalCompanies() throws RemoteException{
+    	return new HashSet<String>(namingService.getRentals().keySet());
     }
 	
     private List<Quote> quotes = new ArrayList();
     
-    public void createQuote(ReservationConstraints constraint, String client) throws ReservationException{
+    public void createQuote(ReservationConstraints constraint, String client) throws ReservationException, RemoteException{
         boolean go = true;
+        
         for (String s: getAllRentalCompanies()){
               try{
                   CarRentalCompany crc = namingService.getRental(s);
@@ -45,13 +49,13 @@ public class ReservationSession extends AbstractSession implements IReservationS
                   quotes.add(quote);
                   go = false;
               }
-              catch (ReservationException e){
-                  
+              catch (Exception ex){
+            	  
               }
         
         }
         if (go){
-            throw new ReservationException("error");
+            throw new ReservationException("error in create Quote");
         }
       }
     
@@ -60,7 +64,7 @@ public class ReservationSession extends AbstractSession implements IReservationS
     }
     
     
-    public List<Reservation> confirmQuotes(List<Quote> quotes) throws ReservationException{
+    public List<Reservation> confirmQuotes(List<Quote> quotes) throws ReservationException, RemoteException{
         List<Reservation> res = new ArrayList<Reservation>();
         for (Quote q: quotes){
             try{
@@ -74,14 +78,14 @@ public class ReservationSession extends AbstractSession implements IReservationS
                     crc.cancelReservation(r);
                 }
                 
-                throw new ReservationException("All reservations cancelled");
+                //throw new ReservationException("All reservations cancelled");
             }
         }
         return res;
     }
     
     
-    public List<CarType> getAvailableCarTypes(Date start, Date end){
+    public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException{
         List<CarType> cartype = new ArrayList();      
         for(String crc : getAllRentalCompanies()){
             CarRentalCompany crc1 = namingService.getRental(crc);
@@ -92,7 +96,7 @@ public class ReservationSession extends AbstractSession implements IReservationS
         return cartype;
     }
     
-    public CarType getCheapestCarType(Date start, Date end, String region){
+    public CarType getCheapestCarType(Date start, Date end, String region) throws RemoteException{
     	
         List<CarType> availableCartypes = new ArrayList();
         List<CarRentalCompany> goodCarRentalCompany = new ArrayList();
