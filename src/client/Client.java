@@ -14,7 +14,7 @@ import rental.ReservationConstraints;
 import session.ManagerSession;
 import session.ReservationSession;
 
-public class Client extends AbstractTestBooking<ReservationSession, ManagerSession> {
+public class Client extends AbstractTestAgency<ReservationSession, ManagerSession> {
 	private ICarRentalCompany crc;
 	
 	/********
@@ -56,13 +56,13 @@ public class Client extends AbstractTestBooking<ReservationSession, ManagerSessi
 	 * @throws 	Exception
 	 * 			if things go wrong, throw exception
 	 */
-	@Override
-	protected void checkForAvailableCarTypes(Date start, Date end) throws Exception {
-		Set<CarType> cars = this.crc.getAvailableCarTypes(start, end);
-		for (CarType s : cars) {
-		    System.out.println(s);
-		}
-	}
+//	@Override
+//	protected void checkForAvailableCarTypes(Date start, Date end) throws Exception {
+//		Set<CarType> cars = this.crc.getAvailableCarTypes(start, end);
+//		for (CarType s : cars) {
+//		    System.out.println(s);
+//		}
+//	}
 
 	/**
 	 * Retrieve a quote for a given car type (tentative reservation).
@@ -82,13 +82,13 @@ public class Client extends AbstractTestBooking<ReservationSession, ManagerSessi
 	 * @throws 	Exception
 	 * 			if things go wrong, throw exception
 	 */
-	@Override
-	protected Quote createQuote(String clientName, Date start, Date end,
-			String carType, String region) throws Exception {
-		ReservationConstraints constraints = new ReservationConstraints(start,end,carType,region);
-		Quote quote = crc.createQuote(constraints, clientName);
-		return quote;
-	}
+//	@Override
+//	protected Quote createQuote(String clientName, Date start, Date end,
+//			String carType, String region) throws Exception {
+//		ReservationConstraints constraints = new ReservationConstraints(start,end,carType,region);
+//		Quote quote = crc.createQuote(constraints, clientName);
+//		return quote;
+//	}
 
 	/**
 	 * Confirm the given quote to receive a final reservation of a car.
@@ -100,13 +100,13 @@ public class Client extends AbstractTestBooking<ReservationSession, ManagerSessi
 	 * @throws 	Exception
 	 * 			if things go wrong, throw exception
 	 */
-	@Override
-	protected Reservation confirmQuote(Quote quote) throws Exception {
-		Reservation res = crc.confirmQuote(quote);
-		return res;
-		
-		
-	}
+//	@Override
+//	protected Reservation confirmQuote(Quote quote) throws Exception {
+//		Reservation res = crc.confirmQuote(quote);
+//		return res;
+//		
+//		
+//	}
 	
 	/**
 	 * Get all reservations made by the given client.
@@ -118,15 +118,15 @@ public class Client extends AbstractTestBooking<ReservationSession, ManagerSessi
 	 * @throws 	Exception
 	 * 			if things go wrong, throw exception
 	 */
-	@Override
-	protected List<Reservation> getReservationsByRenter(String clientName) throws Exception {
-		List<Reservation> res = new ArrayList<>();
-		for (Reservation r : crc.getReservations() ) {
-			if (r.getCarRenter()== clientName) {
-				res.add(r);}
-			}
-		return res;
-	}
+//	@Override
+//	protected List<Reservation> getReservationsByRenter(String clientName) throws Exception {
+//		List<Reservation> res = new ArrayList<>();
+//		for (Reservation r : crc.getReservations() ) {
+//			if (r.getCarRenter()== clientName) {
+//				res.add(r);}
+//			}
+//		return res;
+//	}
 
 	/**
 	 * Get the number of reservations for a particular car type.
@@ -138,21 +138,59 @@ public class Client extends AbstractTestBooking<ReservationSession, ManagerSessi
 	 * @throws 	Exception
 	 * 			if things go wrong, throw exception
 	 */
-	@Override
-	protected int getNumberOfReservationsForCarType(String carType) throws Exception {
-		System.out.println(crc.getReservationsByType(carType));
-		return crc.getReservationsByType(carType);
-	}
+//	@Override
+//	protected int getNumberOfReservationsForCarType(String carType) throws Exception {
+//		System.out.println(crc.getReservationsByType(carType));
+//		return crc.getReservationsByType(carType);
+//	}
 
 	@Override
 	protected ReservationSession getNewReservationSession(String name) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
+//
+//	@Override
+//	protected ManagerSession getNewManagerSession(String name) throws Exception {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	@Override
-	protected ManagerSession getNewManagerSession(String name) throws Exception {
+	protected ManagerSession getNewManagerSession(String name, String carRentalName) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected void checkForAvailableCarTypes(ReservationSession session, Date start, Date end) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void addQuoteToSession(ReservationSession session, String name, Date start, Date end, String carType,
+			String region) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected List<Reservation> confirmQuotes(ReservationSession session, String name) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected int getNumberOfReservationsBy(ManagerSession ms, String clientName) throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	protected int getNumberOfReservationsForCarType(ManagerSession ms, String carRentalName, String carType)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
