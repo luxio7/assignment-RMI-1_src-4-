@@ -121,4 +121,6 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
 		
 		return mostPopularCarType;
 	}
+	
+	
 }
