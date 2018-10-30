@@ -23,6 +23,9 @@ public class RentalServer {
 		CrcData data2 = loadData("dockx.csv");
 		CarRentalCompany crc2 = new CarRentalCompany(data2.name, data2.regions, data2.cars);	
 		ICarRentalCompany stub2 = (ICarRentalCompany) UnicastRemoteObject.exportObject(crc2,0);
+		Registry registry = LocateRegistry.getRegistry();
+		registry.rebind("rentalserver", stub);
+		registry.rebind("rentalserver", stub2);
 		
 	}
 
