@@ -122,18 +122,12 @@ public class ReservationSession extends AbstractSession implements IReservationS
         List<ICarRentalCompany> goodCarRentalCompany = new ArrayList();
         CarType cheapestCarType = null;
         
-        System.out.println("voor een rentalcompanie krijgen");
-        System.out.println("check op region: " + region);
-        
         //de juiste rentalcompanie krijgen
         for(String crc : getAllRentalCompanies()){
             ICarRentalCompany crc1 = namingService.getRental(crc);
             for (String regionToCheck : crc1.getRegions()){
-            	System.out.println(regionToCheck);
             	if (regionToCheck.equals(region)) {
-            		System.out.println("toevoegen");
             		goodCarRentalCompany.add(crc1);
-            		System.out.println(goodCarRentalCompany);
             	}
             }
         }

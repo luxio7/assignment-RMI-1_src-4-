@@ -51,10 +51,12 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
 	
     public int getNumberReservationsBy(String clientName) throws RemoteException {
         int counter = 0;
-        Map<String, ICarRentalCompany> rentals = this.getNamingService().registeredCRC;
-        for (ICarRentalCompany crc: rentals.values()) {
-            counter += crc.getReservationsBy(clientName).size();
+        
+        List<ICarRentalCompany> crcs = this.getNamingService().getAllCompanies();
+        for (ICarRentalCompany crc : crcs){
+        	counter += crc.getReservationsBy(clientName).size();
         }
+        
         return counter;
     }
 	public Set<String> getBestCustomer() throws RemoteException{

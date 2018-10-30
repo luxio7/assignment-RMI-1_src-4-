@@ -65,7 +65,7 @@ public class Client extends AbstractTestManagement<ReservationSession, ManagerSe
 	}
 
 
-	protected ManagerSession getNewManagerSession(String name, String carRentalName) throws Exception {
+	protected ManagerSession getNewManagerSession(String name, String carRentalName) throws Exception {		
 		ManagerSession manSes = new ManagerSession(this.namingservice,"reservation_"+name);
 		return manSes;
 	}
