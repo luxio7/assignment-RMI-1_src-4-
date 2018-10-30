@@ -15,7 +15,7 @@ public class CarRentalAgencyServer {
 	public static void main(String[] args) throws RemoteException, NotBoundException{
 		System.setSecurityManager(null);
 		Registry registry = LocateRegistry.getRegistry();
-		INamingService namingService = (INamingService) registry.lookup("namingservice");
+		INamingService namingService = (INamingService) registry.lookup("namingserver");
 		ICarRentalAgency crc = new CarRentalAgency(namingService);
         ICarRentalAgency stub =
             ( ICarRentalAgency) UnicastRemoteObject.exportObject(crc, 0);

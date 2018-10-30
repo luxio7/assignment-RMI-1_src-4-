@@ -129,11 +129,12 @@ public class CarRentalCompany implements ICarRentalCompany {
 			throws ReservationException {
 		logger.log(Level.INFO, "<{0}> Creating tentative reservation for {1} with constraints {2}", 
                         new Object[]{name, client, constraints.toString()});
-		
-				
-		if(!regions.contains(constraints.getRegion()) || !isAvailable(constraints.getCarType(), constraints.getStartDate(), constraints.getEndDate()))
+			
+		if(!regions.contains(constraints.getRegion()) || !isAvailable(constraints.getCarType(), constraints.getStartDate(), constraints.getEndDate())){
 			throw new ReservationException("<" + name
-				+ "> No cars available to satisfy the given constraints.");
+					+ "> No cars available to satisfy the given constraints.");
+		}
+			
 
 		CarType type = getCarType(constraints.getCarType());
 		

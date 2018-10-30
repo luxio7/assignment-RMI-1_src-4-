@@ -28,10 +28,8 @@ public class Client extends AbstractTestAgency<ReservationSession, ManagerSessio
 	public static void main(String[] args) throws Exception {
 		System.setSecurityManager(null);
 		Registry registry = LocateRegistry.getRegistry("localhost", 1099);
-		
-		String carRentalCompanyName = "Hertz";
-		
-		Client client = new Client("simpleTrips", carRentalCompanyName);
+
+		Client client = new Client("trips");
 		
 		NamingServer.main(args);
 		CarRentalAgencyServer.main(args);
@@ -48,7 +46,7 @@ public class Client extends AbstractTestAgency<ReservationSession, ManagerSessio
 	 * CONSTRUCTOR *
 	 ***************/
 	
-	public Client(String scriptFile, String carRentalCompanyName) {
+	public Client(String scriptFile) {
 		super(scriptFile);
 	}
 	
