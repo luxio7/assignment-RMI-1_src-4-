@@ -14,8 +14,6 @@ public class NamingService implements INamingService{
 	static Map<String, ICarRentalCompany> registeredCRC = new HashMap<String, ICarRentalCompany>();
 	
 	public void register(String name, ICarRentalCompany crc) throws RemoteException{
-		System.out.println("hij gaat een crc toevoegen");
-		System.out.println(crc.getName());
 		registeredCRC.put(name, crc);
 	}
 	

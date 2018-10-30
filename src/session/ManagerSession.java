@@ -28,7 +28,6 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
 	
 	public void addCarRentalCompany(String name, CarRentalCompany crc) throws RemoteException{
 		try{
-			System.out.println("hij gaat een crc proberen toe te voegen in managersession -> add car rental company");
 			this.namingService.register(name, crc);
 		} catch (RemoteException e){
 			throw new RemoteException();
