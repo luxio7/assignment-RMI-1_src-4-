@@ -82,13 +82,13 @@ public class Client extends AbstractTestAgency<ReservationSession, ManagerSessio
 	 * @throws 	Exception
 	 * 			if things go wrong, throw exception
 	 */
-//	@Override
-//	protected Quote createQuote(String clientName, Date start, Date end,
-//			String carType, String region) throws Exception {
-//		ReservationConstraints constraints = new ReservationConstraints(start,end,carType,region);
-//		Quote quote = crc.createQuote(constraints, clientName);
-//		return quote;
-//	}
+
+	protected Quote createQuote(String clientName, Date start, Date end,
+			String carType, String region) throws Exception {
+		ReservationConstraints constraints = new ReservationConstraints(start,end,carType,region);
+		Quote quote = crc.createQuote(constraints, clientName);
+		return quote;
+	}
 
 	/**
 	 * Confirm the given quote to receive a final reservation of a car.
@@ -100,13 +100,13 @@ public class Client extends AbstractTestAgency<ReservationSession, ManagerSessio
 	 * @throws 	Exception
 	 * 			if things go wrong, throw exception
 	 */
-//	@Override
-//	protected Reservation confirmQuote(Quote quote) throws Exception {
-//		Reservation res = crc.confirmQuote(quote);
-//		return res;
-//		
-//		
-//	}
+
+	protected Reservation confirmQuote(Quote quote) throws Exception {
+		Reservation res = crc.confirmQuote(quote);
+		return res;
+		
+		
+	}
 	
 	/**
 	 * Get all reservations made by the given client.
@@ -118,15 +118,15 @@ public class Client extends AbstractTestAgency<ReservationSession, ManagerSessio
 	 * @throws 	Exception
 	 * 			if things go wrong, throw exception
 	 */
-//	@Override
-//	protected List<Reservation> getReservationsByRenter(String clientName) throws Exception {
-//		List<Reservation> res = new ArrayList<>();
-//		for (Reservation r : crc.getReservations() ) {
-//			if (r.getCarRenter()== clientName) {
-//				res.add(r);}
-//			}
-//		return res;
-//	}
+
+	protected List<Reservation> getReservationsByRenter(String clientName) throws Exception {
+		List<Reservation> res = new ArrayList<>();
+		for (Reservation r : crc.getReservations() ) {
+			if (r.getCarRenter()== clientName) {
+				res.add(r);}
+			}
+		return res;
+	}
 
 	/**
 	 * Get the number of reservations for a particular car type.
