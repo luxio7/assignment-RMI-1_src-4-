@@ -122,6 +122,8 @@ public class ReservationSession extends AbstractSession implements IReservationS
         List<ICarRentalCompany> goodCarRentalCompany = new ArrayList();
         CarType cheapestCarType = null;
         
+        System.out.println("voor rentalcompanie krijgen");
+        
         //de juiste rentalcompanie krijgen
         for(String crc : getAllRentalCompanies()){
             ICarRentalCompany crc1 = namingService.getRental(crc);
@@ -131,6 +133,8 @@ public class ReservationSession extends AbstractSession implements IReservationS
             	}
             }
         }
+        
+        System.out.println("voor cartypes krijgen");
         
         //de juiste cartypes krijgen van de car rental companies en de goedkoopste opslaan
         double minimumPrice = Double.POSITIVE_INFINITY;

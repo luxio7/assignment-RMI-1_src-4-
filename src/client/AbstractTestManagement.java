@@ -75,11 +75,13 @@ public abstract class AbstractTestManagement<ReservationSession, ManagerSession>
     }
 
     ReservationSession managerResSession = null;
+    
 	protected void processLine(String name, String cmd, List<Character> flags, StringTokenizer scriptLineTokens) throws ApplicationException {
 		if (cmd.startsWith("B")) {
 			super.processLine(name, cmd, flags, scriptLineTokens);
 			return;
 		}
+		
 		if (cmd.equals("MB")) {
            Set<String> bestClientsShouldBe = new HashSet<String>(Arrays.asList(name.split("/")));
            Set<String> bestClientsAre = null;

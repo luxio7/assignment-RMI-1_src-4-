@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import namingservice.INamingService;
 import rental.Car;
@@ -55,35 +57,46 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
         }
         return counter;
     }
-	public String getBestCustomer(String crc1) throws RemoteException{
-        ICarRentalCompany crc = namingService.getRental(crc1);
-        Collection<Car> cars = crc.getCars();
-        Map<String,Integer> map = new HashMap<String, Integer>();
+	public Set<String> getBestCustomer() throws RemoteException{
+        List<ICarRentalCompany> crc = namingService.getAllCompanies();
+        
+        
+        List<Car> cars = new ArrayList<Car>();
+        for (ICarRentalCompany crcLoop : crc){
+        	cars.addAll(crcLoop.getCars());
+        }
+        
+        
+        
+        Map<String,Integer> amountOfReservations = new HashMap<String, Integer>();
         for(Car c : cars){
             for(Reservation r : c.getAllReservations()){
-                if(map.containsKey(r.getCarRenter())){
-                    Integer res = map.get(r.getCarRenter());
-                    map.put(r.getCarRenter(), res +1);
+                if(amountOfReservations.containsKey(r.getCarRenter())){
+                    Integer res = amountOfReservations.get(r.getCarRenter());
+                    amountOfReservations.put(r.getCarRenter(), res +1);
                 }
                 else{
-                    map.put(r.getCarRenter(),1);
+                	amountOfReservations.put(r.getCarRenter(),1);
                     
                 }
             }
         }
         Integer max = 0;
-        String clien="";
-        for(String client : map.keySet()){
-            if(map.get(client)>max){
-                max = map.get(client);
-                clien = client;
+        Set<String> clients = new HashSet<String>();
+        for(String client : amountOfReservations.keySet()){
+            if(amountOfReservations.get(client) == max){
+                clients.add(client);
+            } else if(amountOfReservations.get(client) > max) {
+            	max = amountOfReservations.get(client);
+            	clients = new HashSet<String>();
+            	clients.add(client);
             }
         }
-        return clien;
+        return clients;
     }
 	
 	
-	public CarType getMostPopularCarType(Integer year, CarRentalCompany crc){
+	public CarType getMostPopularCarType(Integer year, ICarRentalCompany crc) throws RemoteException{
 		Map<CarType, Integer> reservations = new HashMap<CarType, Integer>();
 		List<Reservation> reservationsSpecificCar = new ArrayList<Reservation>();
 		List<Reservation> goodReservations = new ArrayList<Reservation>();
@@ -121,6 +134,7 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
 		
 		return mostPopularCarType;
 	}
+
 	
 	
 }
