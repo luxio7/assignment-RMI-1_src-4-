@@ -2,6 +2,7 @@ package namingservice;
 
 import java.rmi.Remote;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import rental.CarRentalCompany;
@@ -14,4 +15,5 @@ public interface INamingService extends Remote{
 	public void unregister(String name);
 	public Map<String, CarRentalCompany> getRentals();
 	public CarRentalCompany getRental(String CrcName);
+	public List<CarRentalCompany> getAllCompanies();
 }

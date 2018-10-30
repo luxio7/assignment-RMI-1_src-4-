@@ -9,7 +9,7 @@ public interface IManagerSession extends Remote {
 
 	public void addCarRentalCompany(String name, CarRentalCompany crc);
 	public void UnRegisterCarRentalCompany(String name);
-	public Integer numberOfReservationsByCarType(String cartype, CarRentalCompany crc);
+	public Integer numberOfReservationsByCarType(String cartype, String crc);
 	public String getBestCustomer(String crc1);
 	public CarType getMostPopularCarType(Integer year, CarRentalCompany crc);
 	

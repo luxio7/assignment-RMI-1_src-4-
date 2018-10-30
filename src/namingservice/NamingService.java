@@ -1,6 +1,8 @@
 package namingservice;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import rental.CarRentalCompany;
@@ -23,6 +25,14 @@ public class NamingService implements INamingService{
 	public CarRentalCompany getRental(String CrcName){
 		return registeredCRC.get(CrcName);
 	}
-
+	
+	public List<CarRentalCompany> getAllCompanies(){
+		List<CarRentalCompany> list = new ArrayList();
+		for(CarRentalCompany crc : registeredCRC.values()){
+			list.add(crc);
+		}
+		return list;
+		
+	}
 
 }

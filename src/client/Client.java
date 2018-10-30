@@ -6,16 +6,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import carrentalagency.CarRentalAgencyServer;
+import namingservice.INamingService;
+import namingservice.NamingServer;
 import rental.CarType;
 import rental.ICarRentalCompany;
 import rental.Quote;
 import rental.Reservation;
 import rental.ReservationConstraints;
+import session.IReservationSession;
 import session.ManagerSession;
 import session.ReservationSession;
 
 public class Client extends AbstractTestAgency<ReservationSession, ManagerSession> {
-	private ICarRentalCompany crc;
+	private INamingService namingservice;
 	
 	/********
 	 * MAIN *
@@ -30,7 +34,11 @@ public class Client extends AbstractTestAgency<ReservationSession, ManagerSessio
 		Client client = new Client("simpleTrips", carRentalCompanyName);
 		
 		client.crc = (ICarRentalCompany) registry.lookup("rentalserver");
-
+		NamingServer.main(args);
+		CarRentalAgencyServer.main(args);
+		INamingService namingservice1 = (INamingService) registry.lookup("namingserver");
+		client.namingservice = namingservice1;
+		
 	
 		// An example reservation scenario on car rental company 'Hertz' would be...
 		
@@ -45,25 +53,6 @@ public class Client extends AbstractTestAgency<ReservationSession, ManagerSessio
 		super(scriptFile);
 	}
 	
-	/**
-	 * Check which car types are available in the given period
-	 * and print this list of car types.
-	 *
-	 * @param 	start
-	 * 			start time of the period
-	 * @param 	end
-	 * 			end time of the period
-	 * @throws 	Exception
-	 * 			if things go wrong, throw exception
-	 */
-//	@Override
-//	protected void checkForAvailableCarTypes(Date start, Date end) throws Exception {
-//		Set<CarType> cars = this.crc.getAvailableCarTypes(start, end);
-//		for (CarType s : cars) {
-//		    System.out.println(s);
-//		}
-//	}
-
 	/**
 	 * Retrieve a quote for a given car type (tentative reservation).
 	 * 
@@ -108,25 +97,7 @@ public class Client extends AbstractTestAgency<ReservationSession, ManagerSessio
 		
 	}
 	
-	/**
-	 * Get all reservations made by the given client.
-	 *
-	 * @param 	clientName
-	 * 			name of the client
-	 * @return	the list of reservations of the given client
-	 * 
-	 * @throws 	Exception
-	 * 			if things go wrong, throw exception
-	 */
 
-	protected List<Reservation> getReservationsByRenter(String clientName) throws Exception {
-		List<Reservation> res = new ArrayList<>();
-		for (Reservation r : crc.getReservations() ) {
-			if (r.getCarRenter()== clientName) {
-				res.add(r);}
-			}
-		return res;
-	}
 
 	/**
 	 * Get the number of reservations for a particular car type.
@@ -146,51 +117,48 @@ public class Client extends AbstractTestAgency<ReservationSession, ManagerSessio
 
 	@Override
 	protected ReservationSession getNewReservationSession(String name) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		ReservationSession resSes = new ReservationSession(this.namingservice);
+		return resSes;
 	}
-//
-//	@Override
-//	protected ManagerSession getNewManagerSession(String name) throws Exception {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+
 
 	@Override
 	protected ManagerSession getNewManagerSession(String name, String carRentalName) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		ManagerSession manSes = new ManagerSession(this.namingservice);
+		return manSes;
 	}
 
 	@Override
 	protected void checkForAvailableCarTypes(ReservationSession session, Date start, Date end) throws Exception {
-		// TODO Auto-generated method stub
+		List<CarType> cars = session.getAvailableCarTypes(start, end);
+		for (CarType s : cars) {
+		    System.out.println(s);
+		}
 		
 	}
 
 	@Override
 	protected void addQuoteToSession(ReservationSession session, String name, Date start, Date end, String carType,
 			String region) throws Exception {
-		// TODO Auto-generated method stub
+		ReservationConstraints constraint = new ReservationConstraints(start, end, carType, region);
+		session.createQuote(constraint, name);
 		
 	}
 
 	@Override
 	protected List<Reservation> confirmQuotes(ReservationSession session, String name) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		List<Reservation> res = session.confirmQuotes(session.getCurrentQuotes());
+		return res;
 	}
 
 	@Override
 	protected int getNumberOfReservationsBy(ManagerSession ms, String clientName) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return ms.getNumberReservationsBy(clientName);
 	}
 
 	@Override
 	protected int getNumberOfReservationsForCarType(ManagerSession ms, String carRentalName, String carType)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return ms.numberOfReservationsByCarType(carType, carRentalName);
 	}
 }

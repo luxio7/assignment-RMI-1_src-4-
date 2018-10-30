@@ -1,5 +1,10 @@
 package session;
 
+<<<<<<< HEAD
+import java.rmi.RemoteException;
+=======
+import java.text.SimpleDateFormat;
+>>>>>>> d6c78073120c7ee310f5bcbb168bd78a78d0a04f
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -11,31 +16,41 @@ import namingservice.INamingService;
 import rental.Car;
 import rental.CarRentalCompany;
 import rental.CarType;
+import rental.ICarRentalCompany;
 import rental.Reservation;
 
 public class ManagerSession extends AbstractSession implements IManagerSession{
 	
 	
-	public ManagerSession(INamingService namingservice) {
-		super(namingservice);
+	public ManagerSession(INamingService namingservice, String id) {
+		super(namingservice, id);
 	}
 	
 	public void addCarRentalCompany(String name, CarRentalCompany crc){
-		this.namingservice.register(name, crc);
+		this.namingService.register(name, crc);
 	}
-	
+
 	public void UnRegisterCarRentalCompany(String name){
-		this.namingservice.unregister(name);
+		this.namingService.unregister(name);
 	}
 	
-	public Integer numberOfReservationsByCarType(String cartype, CarRentalCompany crc){
-		return crc.getReservationsByType(cartype);
+	public Integer numberOfReservationsByCarType(String cartype, String crc){
+		CarRentalCompany crc1 = this.getNamingService().getRental(crc);
+		return crc1.getReservationsByType(cartype);
 	}
 	
+    public int getNumberReservationsBy(String clientName) throws RemoteException {
+        int counter = 0;
+        Map<String, ICarRentalCompany> rentals = this.getNamingService().registeredCRC;
+        for (ICarRentalCompany crc: rentals.values()) {
+            counter += crc.getReservationsBy(clientName).size();
+        }
+        return counter;
+    }
 	public String getBestCustomer(String crc1){
-        CarRentalCompany crc = namingservice.getRental(crc1);
+        CarRentalCompany crc = namingService.getRental(crc1);
         Collection<Car> cars = crc.getCars();
-        Map<String,Integer> map = new HashMap();
+        Map<String,Integer> map = new HashMap<String, Integer>();
         for(Car c : cars){
             for(Reservation r : c.getAllReservations()){
                 if(map.containsKey(r.getCarRenter())){
@@ -58,6 +73,7 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
         }
         return clien;
     }
+	
 	
 	public CarType getMostPopularCarType(Integer year, CarRentalCompany crc){
 		Map<CarType, Integer> reservations = new HashMap<CarType, Integer>();

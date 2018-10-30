@@ -202,5 +202,13 @@ public class CarRentalCompany implements ICarRentalCompany {
 		}
 		return out.toString();
 	}
-	
+	public Set<Reservation> getReservationsBy(String renter) {Set<Reservation> out = new HashSet<Reservation>();
+    for(Car c : cars) {
+        for(Reservation r : c.getAllReservations()) {
+            if(r.getCarRenter().equals(renter))
+                out.add(r);
+        }
+    }
+    return out;
+    }
 }
