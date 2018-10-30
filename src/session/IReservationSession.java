@@ -20,6 +20,6 @@ public interface IReservationSession extends Remote {
 	public List<Quote> getCurrentQuotes();
 	public List<Reservation> confirmQuotes(List<Quote> quotes) throws ReservationException, RemoteException;
 	public List<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException;
-	public CarType getCheapestCarType(Date start, Date end, String region) throws RemoteException;
+	public CarType getCheapestCarType(Date start, Date end, String region) throws Exception;
 	
 }

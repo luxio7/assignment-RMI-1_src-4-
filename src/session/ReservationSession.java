@@ -116,25 +116,34 @@ public class ReservationSession extends AbstractSession implements IReservationS
         return cartype;
     }
     
-    public CarType getCheapestCarType(Date start, Date end, String region) throws RemoteException{
+    public CarType getCheapestCarType(Date start, Date end, String region) throws Exception{
     	
         List<CarType> availableCartypes = new ArrayList();
         List<ICarRentalCompany> goodCarRentalCompany = new ArrayList();
         CarType cheapestCarType = null;
         
-        System.out.println("voor rentalcompanie krijgen");
+        System.out.println("voor een rentalcompanie krijgen");
+        System.out.println("check op region: " + region);
         
         //de juiste rentalcompanie krijgen
         for(String crc : getAllRentalCompanies()){
             ICarRentalCompany crc1 = namingService.getRental(crc);
             for (String regionToCheck : crc1.getRegions()){
-            	if (regionToCheck == region) {
+            	System.out.println(regionToCheck);
+            	if (regionToCheck.equals(region)) {
+            		System.out.println("toevoegen");
             		goodCarRentalCompany.add(crc1);
+            		System.out.println(goodCarRentalCompany);
             	}
             }
         }
         
         System.out.println("voor cartypes krijgen");
+        System.out.println(goodCarRentalCompany);
+        
+        if (goodCarRentalCompany.size() == 0) {
+        	throw new Exception();
+        }
         
         //de juiste cartypes krijgen van de car rental companies en de goedkoopste opslaan
         double minimumPrice = Double.POSITIVE_INFINITY;
