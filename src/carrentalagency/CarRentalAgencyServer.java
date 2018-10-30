@@ -11,14 +11,18 @@ import namingservice.INamingService;
 
 public class CarRentalAgencyServer {
 	
-	
+	/**
+	 * connects to the namingservice so it knows about all the car rental companies
+	 * after this it creates a stub for a carrentalagency that manages all the sessions (managersessions + reservationsessions)
+	 */
 	public static void main(String[] args) throws RemoteException, NotBoundException{
 		System.setSecurityManager(null);
+		
 		Registry registry = LocateRegistry.getRegistry();
 		INamingService namingService = (INamingService) registry.lookup("namingservice");
 		ICarRentalAgency crc = new CarRentalAgency(namingService);
-        ICarRentalAgency stub =
-            ( ICarRentalAgency) UnicastRemoteObject.exportObject(crc, 0);
+		
+        ICarRentalAgency stub = (ICarRentalAgency) UnicastRemoteObject.exportObject(crc, 0);
         registry.rebind("carrentalagency", stub);
 	}
 	

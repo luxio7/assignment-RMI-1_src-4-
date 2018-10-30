@@ -21,22 +21,15 @@ public class CarRentalAgency implements ICarRentalAgency{
 	private Map<String, ReservationSession> activeReservationSessions = new HashMap<String, ReservationSession>();
 	private Map<String, ManagerSession> activeManagerSessions = new HashMap<String, ManagerSession>();
 	
-	public void endReservationSession(String sessionId) 
-			throws RemoteException {
-		synchronized (this.activeReservationSessions) {
+	public void endReservationSession(String sessionId) throws RemoteException {
 			this.activeReservationSessions.remove(sessionId);
-		}
 	}
 	
-	public void endManagerSession(String sessionId) 
-			throws RemoteException {
-		synchronized (this.activeManagerSessions) {
+	public void endManagerSession(String sessionId) throws RemoteException {
 			this.activeManagerSessions.remove(sessionId);
-		}
 	}
 	
-	public IReservationSession getReservationSession(String sessionId, String clientName)
-			throws RemoteException, IllegalArgumentException {
+	public IReservationSession getReservationSession(String sessionId) throws RemoteException, IllegalArgumentException {
 		
 		if (sessionId == null) {
 			throw new IllegalArgumentException();
@@ -46,7 +39,7 @@ public class CarRentalAgency implements ICarRentalAgency{
 		if (session != null) {
 			return session;
 		} else {
-			ReservationSession newSession = new ReservationSession(this.namingService, sessionId, clientName);
+			ReservationSession newSession = new ReservationSession(this.namingService, sessionId);
 			this.activeReservationSessions.put(sessionId, newSession);
 			return (IReservationSession) UnicastRemoteObject.exportObject(newSession, 0);
 		}
