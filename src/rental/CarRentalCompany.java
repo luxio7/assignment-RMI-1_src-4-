@@ -135,6 +135,10 @@ public class CarRentalCompany implements ICarRentalCompany {
 	public void cancelReservation(Reservation res) {
 		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[]{name, res.toString()});
 		getCar(res.getCarId()).removeReservation(res);
+		
+		Integer amount = reservationsByType.get(res.getCarType());
+		reservationsByType.put(res.getCarType(),amount - 1);
+		
 	}
 
 	public Quote createQuote(ReservationConstraints constraints, String client)
