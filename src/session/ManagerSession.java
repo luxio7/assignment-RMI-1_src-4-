@@ -98,7 +98,7 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
 	
 	
 	public CarType getMostPopularCarType(Integer year, ICarRentalCompany crc) throws RemoteException{
-		Map<CarType, Integer> reservations = new HashMap<CarType, Integer>();
+		Map<CarType, Integer> reservationsPerType = new HashMap<CarType, Integer>();
 		List<Reservation> reservationsSpecificCar = new ArrayList<Reservation>();
 		List<Reservation> goodReservations = new ArrayList<Reservation>();
 		
@@ -110,25 +110,30 @@ public class ManagerSession extends AbstractSession implements IManagerSession{
 				
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(carReservation.getStartDate());
+				
 				int reservationYear = calendar.get(Calendar.YEAR);
 				
 				if (reservationYear == year){
 					goodReservations.add(carReservation);
 				}
 			}
+			if (goodReservations.size() != 0) {
+				if (reservationsPerType.get(car.getType()) == null){
+					reservationsPerType.put(car.getType(), goodReservations.size());
+				} else {
+					reservationsPerType.put(car.getType(), reservationsPerType.get(car.getType())+goodReservations.size());
+				}
+			}
+			goodReservations = new ArrayList<Reservation>();
 			
-			if (reservations.get(car.getType()) == null){
-				reservations.put(car.getType(), goodReservations.size());
-			} else {
-				reservations.put(car.getType(), reservations.get(car.getType())+goodReservations.size());
-			}	
+			
 		}
 		
 		Integer maximumReservations = 0;
 		CarType mostPopularCarType = null;
-		for (CarType key: reservations.keySet()){
-			if (reservations.get(key) > maximumReservations){
-				maximumReservations = reservations.get(key);
+		for (CarType key: reservationsPerType.keySet()){
+			if (reservationsPerType.get(key) > maximumReservations){
+				maximumReservations = reservationsPerType.get(key);
 				mostPopularCarType = key;
 			}
 		}

@@ -98,7 +98,6 @@ public class Client extends AbstractTestManagement<ReservationSession, ManagerSe
 
 	protected int getNumberOfReservationsForCarType(ManagerSession ms, String carRentalName, String carType)
 			throws Exception {
-		System.out.println("nu zoeken naar via client" + carType);
 		return ms.numberOfReservationsByCarType(carType, carRentalName);
 	}
 
