@@ -185,6 +185,7 @@ public class CarRentalCompany implements ICarRentalCompany {
 	private Map<String,Integer> reservationsByType = new HashMap<String, Integer>();
 	
 	public Integer getReservationsByType(String CarType){
+		System.out.println("dit is alles wat er in zit" + this.reservationsByType);
 		if (this.reservationsByType.get(CarType) != null){
 			return this.reservationsByType.get(CarType);
 		} else {

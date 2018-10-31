@@ -106,7 +106,6 @@ public class ReservationSession extends AbstractSession implements IReservationS
     
     public CarType getCheapestCarType(Date start, Date end, String region) throws Exception{
     	
-        List<CarType> availableCartypes = new ArrayList();
         List<ICarRentalCompany> goodCarRentalCompany = new ArrayList();
         CarType cheapestCarType = null;
         

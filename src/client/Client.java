@@ -98,6 +98,7 @@ public class Client extends AbstractTestManagement<ReservationSession, ManagerSe
 
 	protected int getNumberOfReservationsForCarType(ManagerSession ms, String carRentalName, String carType)
 			throws Exception {
+		System.out.println("nu zoeken naar via client" + carType);
 		return ms.numberOfReservationsByCarType(carType, carRentalName);
 	}
 
@@ -110,13 +111,13 @@ public class Client extends AbstractTestManagement<ReservationSession, ManagerSe
 	@Override
 	protected String getCheapestCarType(ReservationSession session, Date start, Date end, String region)
 			throws Exception {
-		return session.getCheapestCarType(start, end, region).toString();
+		return session.getCheapestCarType(start, end, region).getName();
 	}
 
 	@Override
 	protected CarType getMostPopularCarTypeIn(ManagerSession ms, String carRentalCompanyName, int year)
 			throws Exception {
-		;
+		
 		return ms.getMostPopularCarType(year, this.namingservice.getRental(carRentalCompanyName));
 	}
 }
