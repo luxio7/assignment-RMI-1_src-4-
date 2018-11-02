@@ -13,11 +13,11 @@ public class NamingService implements INamingService{
 	
 	static Map<String, ICarRentalCompany> registeredCRC = new HashMap<String, ICarRentalCompany>();
 	
-	public void register(String name, ICarRentalCompany crc) throws RemoteException{
+	public synchronized void register(String name, ICarRentalCompany crc) throws RemoteException{
 		registeredCRC.put(name, crc);
 	}
 	
-	public void unregister(String name){
+	public synchronized void unregister(String name){
 		registeredCRC.remove(name);
 	}
 	public Map<String, ICarRentalCompany> getRentals(){
